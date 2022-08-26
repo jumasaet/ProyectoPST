@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
                     "select name,pass from usuarios where id=" + iden, null);
             if (fila.moveToFirst()){
                 if (fila.getString(1).equals(pas)){
+                    et11.setText("");
+                    et21.setText("");
                     Intent i = new Intent(this, MainActivity2.class );
                     startActivity(i);
                 }else{

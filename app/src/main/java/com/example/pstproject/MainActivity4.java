@@ -3,6 +3,7 @@ package com.example.pstproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -36,19 +37,29 @@ public class MainActivity4 extends AppCompatActivity {
             Toast.makeText(this, "Debe escribir la misma contraseña en ambos parámetros ",
                     Toast.LENGTH_SHORT).show();
         } else{
+
             AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
                     "administracion", null, 1);
             SQLiteDatabase bd = admin.getWritableDatabase();
             String id = et14.getText().toString();
             String nom = et24.getText().toString();
             String p = et34.getText().toString();
-            bd.execSQL("insert into usuarios (id,name,pass) values ("+id+",'"+nom+"','"+p+"')");
-            //insert into estudiantes (id,nombre,contraseña) values (1316935194,'"Juan"',pepito)
-            bd.close();
+            Cursor fila = bd.rawQuery(
+                    "select name,pass from usuarios where id=" + id, null);
+            if (fila.moveToFirst()){
+                bd.execSQL("insert into usuarios (id,name,pass) values ("+id+",'"+nom+"','"+p+"')");
+                //insert into estudiantes (id,nombre,contraseña) values (1316935194,'"Juan"',pepito)
+                bd.close();
 
-            Toast.makeText(this, et24.getText()+" se ha registrado con éxito",
-                    Toast.LENGTH_SHORT).show();
-            this.finish();
+                Toast.makeText(this, et24.getText()+" se ha registrado con éxito",
+                        Toast.LENGTH_SHORT).show();
+                this.finish();
+            }else{
+                Toast.makeText(this, et14.getText()+" ya existe",
+                        Toast.LENGTH_SHORT).show();
+                this.finish();
+            }
+
         }
 
     }
